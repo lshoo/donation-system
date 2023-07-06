@@ -15,4 +15,7 @@ pub enum ContractError {
 
     #[error("{0}")]
     PaymentErr(#[from] PaymentError),
+
+    #[error("Invalid reply {id}")]
+    UnrecognizedReplyErr { id: u64 },
 }

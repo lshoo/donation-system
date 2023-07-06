@@ -58,6 +58,6 @@ pub fn execute(
         Withdraw { receiver, amount } => exec::withdraw(deps, receiver, amount),
         Close {} => exec::close(deps, info),
         ProposerMember { addr } => exec::proposer_member(deps, addr),
-        UpdateWeight {} => exec::update_weight(deps, env),
+        UpdateWeight {} => exec::update_weight(deps, env, info),
     }
 }

@@ -31,12 +31,14 @@ pub enum ExecMsg {
 pub enum QueryMsg {}
 
 // Message for Distribution
+#[cw_serde]
 pub enum DistributionExecMsg {
     Distribute {},
-    Withdraw { weight: u64, diff: u64 },
+    Withdraw { weight: u64, diff: i64 },
 }
 
 // Message for Membership
+#[cw_serde]
 pub enum MembershipExecMsg {
     ProposerMember { addr: String },
 }

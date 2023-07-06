@@ -1,6 +1,6 @@
 use cosmwasm_schema::write_api;
 
-use donation::msg::{ExecMsg, InstantiateMsg, QueryMsg};
+use proxy::msg::{ExecMsg, InstantiateMsg, QueryMsg};
 
 fn main() {
     write_api! {

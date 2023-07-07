@@ -1,8 +1,13 @@
-use cosmwasm_std::{ensure, to_binary, Addr, DepsMut, Env, MessageInfo, Response, SubMsg, WasmMsg};
+pub mod exec;
+pub mod reply;
+
+use cosmwasm_std::{
+    ensure, to_binary, Addr, DepsMut, Env, MessageInfo, Reply, Response, SubMsg, WasmMsg,
+};
 use cw2::set_contract_version;
 
 use crate::{
-    msg::InstantiateMsg,
+    msg::{ExecMsg, InstantiateMsg},
     state::{Config, AWAITING_INITIAL_REPS, CONFIG},
     ContractError,
 };
@@ -79,4 +84,26 @@ pub fn instantiate(
     let resp = Response::new().add_submessages(msgs);
 
     Ok(resp)
+}
+
+pub fn execute(
+    deps: DepsMut,
+    env: Env,
+    info: MessageInfo,
+    msg: ExecMsg,
+) -> Result<Response, ContractError> {
+    use ExecMsg::*;
+
+    match msg {
+        ProposeMember { addr } => exec::propose_member(deps, env, info, addr),
+    }
+}
+
+pub fn reply(deps: DepsMut, _env: Env, reply: Reply) -> Result<Response, ContractError> {
+    match reply.id {
+        INITIAL_PROXY_INSTANTIATION_REPLY_ID => {
+            reply::initial_proxy_instantiate(deps, reply.result.into_result())
+        }
+        id => Err(ContractError::UnRecognizedReplyIdErr { id }),
+    }
 }

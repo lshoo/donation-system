@@ -1,4 +1,5 @@
 use cosmwasm_std::StdError;
+use cw_utils::ParseReplyError;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
@@ -7,11 +8,20 @@ pub enum ContractError {
     StdErr(#[from] StdError),
 
     #[error("Unauthorized")]
-    Unauthorized {},
+    UnauthorizedErr {},
 
     #[error("Not enough initial members")]
     NotEnoughInitialMembersErr {},
 
     #[error("Not enough required acceptances")]
     NotEnoughRequiredAcceptancesErr {},
+
+    #[error("Un recognized reply id {id}")]
+    UnRecognizedReplyIdErr { id: u64 },
+
+    #[error("Data missing")]
+    DataMissingErr {},
+
+    #[error("{0}")]
+    ParseErr(#[from] ParseReplyError),
 }

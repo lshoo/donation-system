@@ -14,7 +14,9 @@ pub struct InstantiateMsg {
 }
 
 #[cw_serde]
-pub enum ExecuteMsg {}
+pub enum ExecMsg {
+    ProposeMember { addr: String },
+}
 
 #[cw_serde]
 #[derive(QueryResponses)]

@@ -1,4 +1,4 @@
-use cosmwasm_std::StdError;
+use cosmwasm_std::{Addr, StdError};
 use cw_utils::ParseReplyError;
 use thiserror::Error;
 
@@ -24,4 +24,10 @@ pub enum ContractError {
 
     #[error("{0}")]
     ParseErr(#[from] ParseReplyError),
+
+    #[error("Proxy {addr} is a member")]
+    AlreadyAMemberErr { addr: Addr },
+
+    #[error("Already voted")]
+    AlreadyVotedErr {},
 }

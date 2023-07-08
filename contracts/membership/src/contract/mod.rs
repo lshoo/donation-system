@@ -19,6 +19,7 @@ const CONTRACT_NAME: &str = env!("CARGO_PKG_NAME");
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 const INITIAL_PROXY_INSTANTIATION_REPLY_ID: u64 = 1;
+const PROXY_INSTANTIATION_REPLY_ID: u64 = 2;
 
 pub fn instantiate(
     deps: DepsMut,

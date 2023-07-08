@@ -1,6 +1,5 @@
 use cosmwasm_std::{
-    to_binary, Addr, DepsMut, Empty, Order, Response, StdError, StdResult,
-    SubMsgResponse,
+    to_binary, Addr, DepsMut, Empty, Order, Response, StdError, StdResult, SubMsgResponse,
 };
 use cw_utils::parse_instantiate_response_data;
 
@@ -25,7 +24,7 @@ pub fn initial_proxy_instantiate(
     let awaiting = AWAITING_INITIAL_REPS.load(deps.storage)? - 1;
 
     if awaiting > 0 {
-        AWAITING_INITIAL_REPS.save(deps.storage, &awaiting)?;    // TODO check data is 0?
+        AWAITING_INITIAL_REPS.save(deps.storage, &awaiting)?; // TODO check data is 0?
 
         let resp = Response::new().add_attribute("proxy_addr", &addr);
 

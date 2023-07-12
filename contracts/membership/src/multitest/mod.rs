@@ -3,7 +3,7 @@ mod tests;
 
 use common::msg::ProposeMemberData;
 use cosmwasm_std::{from_binary, to_binary, Addr, Decimal, WasmMsg};
-use cw_multi_test::{App, AppResponse, ContractWrapper, Executor};
+use cw_multi_test::{App, ContractWrapper, Executor};
 
 use anyhow::Result as AnyResult;
 use cw_utils::{parse_execute_response_data, parse_instantiate_response_data};

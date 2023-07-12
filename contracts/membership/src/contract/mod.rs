@@ -109,11 +109,13 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
         IsMember { addr } => query::is_member(deps, addr).and_then(|data| to_binary(&data)),
     }
 }
+
 pub fn reply(deps: DepsMut, _env: Env, reply: Reply) -> Result<Response, ContractError> {
     match reply.id {
         INITIAL_PROXY_INSTANTIATION_REPLY_ID => {
             reply::initial_proxy_instantiated(deps, reply.result.into_result())
         }
+        PROXY_INSTANTIATION_REPLY_ID => reply::proxy_instantiated(deps, reply.result.into_result()),
         id => Err(ContractError::UnRecognizedReplyIdErr { id }),
     }
 }

@@ -16,13 +16,14 @@ const CONTRACT_NAME: &str = env!("CARGO_PKG_NAME");
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub const WITHDRAW_REPLAY_ID: u64 = 1;
+const PROPOSE_MEMBER_ID: u64 = 2;
 
 pub fn instantiate(
     deps: DepsMut,
     env: Env,
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
-    println!("instantiating proxy contract ....");
+    // println!("instantiating proxy contract ....");
 
     ensure!(
         Decimal::zero() <= msg.direct_part && msg.direct_part <= Decimal::percent(100),
@@ -56,7 +57,7 @@ pub fn instantiate(
     HALFTIME.save(deps.storage, &msg.halftime)?;
     LAST_UPDATED.save(deps.storage, &env.block.time.seconds())?;
 
-    println!("proxy contract instantiated ....");
+    // println!("proxy contract instantiated ....");
 
     Ok(Response::new())
 }
@@ -73,7 +74,7 @@ pub fn execute(
         Donate {} => exec::donate(deps, info),
         Withdraw { receiver, amount } => exec::withdraw(deps, env, info, receiver, amount),
         Close {} => exec::close(deps, info),
-        ProposerMember { addr } => exec::proposer_member(deps, addr),
+        ProposerMember { addr } => exec::propose_member(deps, addr),
         UpdateWeight {} => exec::update_weight(deps, env, info),
     }
 }
@@ -81,6 +82,7 @@ pub fn execute(
 pub fn reply(deps: DepsMut, env: Env, reply: Reply) -> Result<Response, ContractError> {
     match reply.id {
         WITHDRAW_REPLAY_ID => reply::withdraw(deps, env),
+        PROPOSE_MEMBER_ID => reply::propose_member(reply.result.into_result()),
         id => Err(ContractError::UnrecognizedReplyErr { id }),
     }
 }

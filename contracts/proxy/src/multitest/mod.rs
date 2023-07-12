@@ -2,8 +2,8 @@
 mod tests;
 
 use common::msg::ProposeMemberData;
-use cosmwasm_std::{from_binary, Addr, Coin, Decimal, WasmMsg};
-use cw_multi_test::{App, AppResponse, ContractWrapper, Executor};
+use cosmwasm_std::{from_binary, Addr, Coin, Decimal};
+use cw_multi_test::{App, ContractWrapper, Executor};
 
 use anyhow::Result as AnyResult;
 use cw_utils::parse_execute_response_data;
@@ -131,6 +131,8 @@ impl ProxyContract {
         };
 
         let resp = app.execute_contract(Addr::unchecked(sender), self.addr(), &msg, &[])?;
+
+        println!("the propse member result is: {:?}", resp);
 
         resp.data
             .map(|data| parse_execute_response_data(&data))

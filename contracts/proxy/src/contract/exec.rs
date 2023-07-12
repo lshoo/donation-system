@@ -96,13 +96,18 @@ pub fn close(deps: DepsMut, info: MessageInfo) -> Result<Response, ContractError
     Ok(Response::new().add_attribute("action", "close"))
 }
 
-pub fn proposer_member(deps: DepsMut, addr: String) -> Result<Response, ContractError> {
+pub fn propose_member(deps: DepsMut, addr: String) -> Result<Response, ContractError> {
     let owner = OWNER.load(deps.storage)?;
-    ensure!(owner == addr, ContractError::UnauthorizedErr {});
+    ensure!(owner != addr, ContractError::UnauthorizedErr {});
 
     let config = CONFIG.load(deps.storage)?;
 
-    let msg = MembershipExecMsg::ProposerMember { addr: addr.clone() };
+    let msg = MembershipExecMsg::ProposeMember {
+        candidate: addr.clone(),
+    };
+
+    // println!("proposer member: {}", addr);
+
     let membership_msg = WasmMsg::Execute {
         contract_addr: config.membership_contract.into_string(),
         msg: to_binary(&msg)?,
@@ -111,7 +116,7 @@ pub fn proposer_member(deps: DepsMut, addr: String) -> Result<Response, Contract
 
     let resp = Response::new()
         .add_message(membership_msg)
-        .add_attribute("action", "proposer_member")
+        .add_attribute("action", "propose_member")
         .add_attribute("sender", owner.to_string())
         .add_attribute("member", addr);
 

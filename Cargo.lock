@@ -74,6 +74,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
+name = "common"
+version = "0.1.0"
+dependencies = [
+ "cosmwasm-schema",
+]
+
+[[package]]
 name = "const-oid"
 version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -473,6 +480,8 @@ checksum = "b4668fb0ea861c1df094127ac5f1da3409a82116a4ba74fca2e58ef927159bb3"
 name = "membership"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "common",
  "cosmwasm-schema",
  "cosmwasm-std",
  "cosmwasm-storage",
@@ -544,6 +553,8 @@ dependencies = [
 name = "proxy"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
+ "common",
  "cosmwasm-schema",
  "cosmwasm-std",
  "cosmwasm-storage",

@@ -14,14 +14,14 @@ pub fn propose_member(
     deps: DepsMut,
     env: Env,
     info: MessageInfo,
-    member: String,
+    candidate: String,
 ) -> Result<Response, ContractError> {
     ensure!(
         MEMBERS.has(deps.storage, &info.sender),
         ContractError::UnauthorizedErr {}
     );
 
-    let addr = deps.api.addr_validate(&member)?;
+    let addr = deps.api.addr_validate(&candidate)?;
 
     for member in MEMBERS.range(deps.storage, None, None, Order::Ascending) {
         let (member, _) = member?;

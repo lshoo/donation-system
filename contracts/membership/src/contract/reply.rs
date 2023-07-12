@@ -1,18 +1,21 @@
+use common::msg::ProposeMemberData;
 use cosmwasm_std::{
     to_binary, Addr, DepsMut, Empty, Order, Response, StdError, StdResult, SubMsgResponse,
 };
 use cw_utils::parse_instantiate_response_data;
 
 use crate::{
-    msg::{InstantiationData, ProposeMemberData},
+    msg::InstantiationData,
     state::{AWAITING_INITIAL_REPS, MEMBERS},
     ContractError,
 };
 
-pub fn initial_proxy_instantiate(
+pub fn initial_proxy_instantiated(
     deps: DepsMut,
     reply: Result<SubMsgResponse, String>,
 ) -> Result<Response, ContractError> {
+    println!("replying proxy instantiated....");
+
     let response = reply.map_err(StdError::generic_err)?;
     let data = response.data.ok_or(ContractError::DataMissingErr {})?;
     let response = parse_instantiate_response_data(&data)?;
@@ -37,8 +40,8 @@ pub fn initial_proxy_instantiate(
             let (member, _) = m?;
             let owner = proxy::state::OWNER.query(&deps.querier, member.clone())?;
             let data = ProposeMemberData {
-                owner_addr: owner,
-                proxy_addr: member,
+                owner_addr: owner.into(),
+                proxy_addr: member.into(),
             };
 
             Ok(data)

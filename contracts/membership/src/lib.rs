@@ -4,6 +4,9 @@ pub mod helpers;
 pub mod msg;
 pub mod state;
 
+#[cfg(any(feature = "mt", test))]
+pub mod multitest;
+
 pub use crate::error::ContractError;
 
 #[cfg(not(feature = "library"))]
@@ -39,6 +42,6 @@ pub fn reply(deps: DepsMut, env: Env, reply: Reply) -> Result<Response, Contract
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(_deps: Deps, _env: Env, _msg: QueryMsg) -> StdResult<Binary> {
-    unimplemented!()
+pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
+    contract::query(deps, env, msg)
 }

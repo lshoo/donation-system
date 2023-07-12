@@ -1,13 +1,15 @@
 pub mod exec;
+pub mod query;
 pub mod reply;
 
 use cosmwasm_std::{
-    ensure, to_binary, Addr, DepsMut, Env, MessageInfo, Reply, Response, SubMsg, WasmMsg,
+    ensure, to_binary, Addr, Binary, Deps, DepsMut, Env, MessageInfo, Reply, Response, StdResult,
+    SubMsg, WasmMsg,
 };
 use cw2::set_contract_version;
 
 use crate::{
-    msg::{ExecMsg, InstantiateMsg},
+    msg::{ExecMsg, InstantiateMsg, QueryMsg},
     state::{Config, AWAITING_INITIAL_REPS, CONFIG},
     ContractError,
 };
@@ -28,12 +30,12 @@ pub fn instantiate(
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
     ensure!(
-        msg.minimal_acceptance >= 2,
+        msg.minimal_acceptances >= 2,
         ContractError::NotEnoughRequiredAcceptancesErr {}
     );
 
     ensure!(
-        msg.minimal_acceptance <= msg.initial_members.len() as u64,
+        msg.minimal_acceptances <= msg.initial_members.len() as u64,
         ContractError::NotEnoughInitialMembersErr {}
     );
 
@@ -46,7 +48,7 @@ pub fn instantiate(
         halftime: msg.halftime,
         proxy_code_id: msg.proxy_code_id,
         distribution_contract: Addr::unchecked(""),
-        minimal_acceptance: msg.minimal_acceptance,
+        minimal_acceptance: msg.minimal_acceptances,
     };
 
     CONFIG.save(deps.storage, &config)?;
@@ -96,14 +98,21 @@ pub fn execute(
     use ExecMsg::*;
 
     match msg {
-        ProposeMember { addr } => exec::propose_member(deps, env, info, addr),
+        ProposeMember { candidate: addr } => exec::propose_member(deps, env, info, addr),
     }
 }
 
+pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
+    use QueryMsg::*;
+
+    match msg {
+        IsMember { addr } => query::is_member(deps, addr).and_then(|data| to_binary(&data)),
+    }
+}
 pub fn reply(deps: DepsMut, _env: Env, reply: Reply) -> Result<Response, ContractError> {
     match reply.id {
         INITIAL_PROXY_INSTANTIATION_REPLY_ID => {
-            reply::initial_proxy_instantiate(deps, reply.result.into_result())
+            reply::initial_proxy_instantiated(deps, reply.result.into_result())
         }
         id => Err(ContractError::UnRecognizedReplyIdErr { id }),
     }

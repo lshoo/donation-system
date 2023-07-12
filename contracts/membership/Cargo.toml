@@ -6,7 +6,7 @@ edition = "2021"
 
 exclude = [
   # Those files are rust-optimizer artifacts. You might want to commit them for convenience but they should not be part of the source code publication.
-  "contract.wasm",
+  "membership.wasm",
   "hash.txt",
 ]
 
@@ -20,6 +20,7 @@ crate-type = ["cdylib", "rlib"]
 backtraces = ["cosmwasm-std/backtraces"]
 # use library feature to disable all instantiate/execute/query exports
 library = []
+mt = ["library", "anyhow", "cw-multi-test"]
 
 
 [package.metadata.scripts]
@@ -41,5 +42,12 @@ serde = { workspace = true }
 thiserror = { workspace = true }
 proxy = { path = "../proxy", features = ["library"] }
 
+cw-multi-test = { workspace = true, optional = true }
+anyhow = { workspace = true, optional = true }
+
+common = { path = "../../crates/common", version = "0.1.0" } 
+
 [dev-dependencies]
 cw-multi-test = { workspace = true }
+anyhow = { workspace = true }
+proxy = { path = "../proxy", features = ["mt"] }

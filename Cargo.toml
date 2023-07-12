@@ -1,6 +1,6 @@
 
 [workspace]
-members = ["contracts/*"]
+members = ["contracts/*", "crates/*"]
 resolver = "2"
 
 [workspace.dependencies]
@@ -15,6 +15,7 @@ serde = { version = "1.0", default-features = false, features = ["derive"] }
 thiserror = { version = "1.0" }
 
 cw-multi-test = "0.16"
+anyhow = "1.0"
 
 [profile.release.package.proxy]
 codegen-units = 1

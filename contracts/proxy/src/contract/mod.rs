@@ -2,7 +2,7 @@ pub mod exec;
 
 pub mod reply;
 
-use cosmwasm_std::{ensure, Decimal, DepsMut, Env, MessageInfo, Reply, Response};
+use cosmwasm_std::{ensure, Addr, Decimal, DepsMut, Env, MessageInfo, Reply, Response};
 use cw2::set_contract_version;
 
 use crate::{
@@ -22,6 +22,8 @@ pub fn instantiate(
     env: Env,
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
+    println!("instantiating proxy contract ....");
+
     ensure!(
         Decimal::zero() <= msg.direct_part && msg.direct_part <= Decimal::percent(100),
         ContractError::InvalidDirectPartErr {
@@ -32,7 +34,8 @@ pub fn instantiate(
     set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
 
     let owner = deps.api.addr_validate(&msg.owner)?;
-    let distribution_contract = deps.api.addr_validate(&msg.distribution_contract)?;
+    // let distribution_contract = deps.api.addr_validate(&msg.distribution_contract)?;
+    let distribution_contract = Addr::unchecked(&msg.distribution_contract);
     let membership_contract = deps.api.addr_validate(&msg.membership_contract)?;
 
     OWNER.save(deps.storage, &owner)?;
@@ -52,6 +55,8 @@ pub fn instantiate(
 
     HALFTIME.save(deps.storage, &msg.halftime)?;
     LAST_UPDATED.save(deps.storage, &env.block.time.seconds())?;
+
+    println!("proxy contract instantiated ....");
 
     Ok(Response::new())
 }

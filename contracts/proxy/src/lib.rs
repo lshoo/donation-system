@@ -4,6 +4,9 @@ pub mod helpers;
 pub mod msg;
 pub mod state;
 
+#[cfg(any(feature = "mt", test))]
+pub mod multitest;
+
 pub use crate::error::ContractError;
 
 #[cfg(not(feature = "library"))]

@@ -3,8 +3,7 @@ pub mod query;
 pub mod reply;
 
 use cosmwasm_std::{
-    ensure, to_binary, Addr, Binary, Decimal, Deps, DepsMut, Empty, Env, MessageInfo, Reply,
-    Response, StdResult,
+    to_binary, Binary, Deps, DepsMut, Empty, Env, MessageInfo, Reply, Response, StdResult,
 };
 use cw2::set_contract_version;
 use cw721_base::{Cw721Contract, InstantiateMsg, QueryMsg};
@@ -109,6 +108,6 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg<Extension>) -> StdResult<Binary
     }
 }
 
-pub fn reply(deps: DepsMut, env: Env, reply: Reply) -> Result<Response, ContractError> {
+pub fn reply(_deps: DepsMut, _env: Env, _reply: Reply) -> Result<Response, ContractError> {
     todo!()
 }

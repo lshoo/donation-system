@@ -12,18 +12,19 @@ pub use crate::error::ContractError;
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Reply, Response, StdResult};
-// use cw2::set_contract_version;
+use cw721_base::{InstantiateMsg, QueryMsg};
+use state::Extension;
 
-use crate::msg::{ExecMsg, InstantiateMsg, QueryMsg};
+use crate::msg::ExecuteMsg;
 
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
     deps: DepsMut,
     env: Env,
-    _info: MessageInfo,
+    info: MessageInfo,
     msg: InstantiateMsg,
 ) -> Result<Response, ContractError> {
-    contract::instantiate(deps, env, msg)
+    contract::instantiate(deps, env, info, msg)
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
@@ -31,13 +32,13 @@ pub fn execute(
     deps: DepsMut,
     env: Env,
     info: MessageInfo,
-    msg: ExecMsg,
+    msg: ExecuteMsg,
 ) -> Result<Response, ContractError> {
     contract::execute(deps, env, info, msg)
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(_deps: Deps, _env: Env, _msg: QueryMsg) -> StdResult<Binary> {
+pub fn query(_deps: Deps, _env: Env, _msg: QueryMsg<Extension>) -> StdResult<Binary> {
     unimplemented!()
 }
 
@@ -45,6 +46,3 @@ pub fn query(_deps: Deps, _env: Env, _msg: QueryMsg) -> StdResult<Binary> {
 pub fn reply(deps: DepsMut, env: Env, reply: Reply) -> Result<Response, ContractError> {
     contract::reply(deps, env, reply)
 }
-
-#[cfg(test)]
-mod tests {}

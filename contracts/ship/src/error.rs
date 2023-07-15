@@ -1,4 +1,4 @@
-use cosmwasm_std::{Decimal, StdError};
+use cosmwasm_std::StdError;
 use cw_utils::PaymentError;
 use thiserror::Error;
 

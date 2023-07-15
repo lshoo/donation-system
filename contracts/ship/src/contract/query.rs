@@ -1,4 +1,7 @@
 use cosmwasm_std::{Binary, Deps, Env, MessageInfo, StdResult, Uint128};
+use cw721_base::QueryMsg;
+
+use crate::state::Extension;
 
 pub fn minter(deps: Deps) -> StdResult<Binary> {
     todo!()

@@ -38,8 +38,8 @@ pub fn execute(
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(_deps: Deps, _env: Env, _msg: QueryMsg<Extension>) -> StdResult<Binary> {
-    unimplemented!()
+pub fn query(deps: Deps, env: Env, msg: QueryMsg<Extension>) -> StdResult<Binary> {
+    contract::query(deps, env, msg)
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]

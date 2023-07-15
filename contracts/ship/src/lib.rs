@@ -11,9 +11,8 @@ pub use crate::error::ContractError;
 
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{Binary, Deps, DepsMut, Env, MessageInfo, Reply, Response, StdResult};
+use cosmwasm_std::{Binary, Deps, DepsMut, Empty, Env, MessageInfo, Reply, Response, StdResult};
 use cw721_base::{InstantiateMsg, QueryMsg};
-use state::Extension;
 
 use crate::msg::ExecuteMsg;
 
@@ -38,7 +37,7 @@ pub fn execute(
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn query(deps: Deps, env: Env, msg: QueryMsg<Extension>) -> StdResult<Binary> {
+pub fn query(deps: Deps, env: Env, msg: QueryMsg<Empty>) -> StdResult<Binary> {
     contract::query(deps, env, msg)
 }
 

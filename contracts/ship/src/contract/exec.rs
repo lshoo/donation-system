@@ -74,25 +74,32 @@ pub fn check_can_send(
     }
 }
 
-pub fn set_minter(
-    deps: DepsMut,
-    info: MessageInfo,
-    minter: String,
-) -> Result<Response, ContractError> {
-    let minter_addr = deps.api.addr_validate(&minter)?;
-    let contract: Cw721Contract<Extension, Empty, Empty, Empty> = Cw721Contract::default();
+// pub fn set_minter(
+//     deps: DepsMut,
+//     info: MessageInfo,
+//     minter: String,
+// ) -> Result<Response, ContractError> {
+//     let minter_addr = deps.api.addr_validate(&minter)?;
+//     let contract: Cw721Contract<Extension, Empty, Empty, Empty> = Cw721Contract::default();
 
-    if contract.minter(deps.as_ref())?.minter == info.sender {
-        contract.minter.save(deps.storage, &minter_addr)?;
-    } else {
-        return Err(ContractError::UnauthorizedErr {});
-    }
+//     let minter = contract.minter(deps.as_ref())?.minter;
 
-    Ok(Response::new()
-        .add_attribute("action", "set_minter")
-        .add_attribute("sender", info.sender.to_string())
-        .add_attribute("minter", minter))
-}
+//     if minter == Some(info.sender.to_string()) {
+//         contract.tokens.s;
+//     } else {
+//         return Err(ContractError::UnauthorizedErr {});
+//     }
+//     // if contract.minter(deps.as_ref())?.minter == info.sender {
+//     //     contract.minter.save(deps.storage, &minter_addr)?;
+//     // } else {
+//     //     return Err(ContractError::UnauthorizedErr {});
+//     // }
+
+//     Ok(Response::new()
+//         .add_attribute("action", "set_minter")
+//         .add_attribute("sender", info.sender.to_string())
+//         .add_attribute("minter", minter))
+// }
 
 pub fn load_freight(
     deps: DepsMut,
@@ -199,7 +206,9 @@ pub fn fuel_up(
 ) -> Result<Response, ContractError> {
     let contract: Cw721Contract<Extension, Empty, Empty, Empty> = Cw721Contract::default();
 
-    if info.sender != contract.minter.load(deps.storage)? {
+    let minter = contract.minter(deps.as_ref())?.minter;
+
+    if minter != Some(info.sender.to_string()) {
         return Err(ContractError::UnauthorizedErr {});
     }
 
@@ -229,7 +238,9 @@ pub fn burn_fuel(
 ) -> Result<Response, ContractError> {
     let contract: Cw721Contract<Extension, Empty, Empty, Empty> = Cw721Contract::default();
 
-    if info.sender != contract.minter.load(deps.storage)? {
+    let minter = contract.minter(deps.as_ref())?.minter;
+
+    if minter != Some(info.sender.to_string()) {
         return Err(ContractError::UnauthorizedErr {});
     }
 

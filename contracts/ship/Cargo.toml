@@ -1,12 +1,12 @@
 [package]
-name = "ship"
+name = "spaceship"
 version = "0.1.0"
 authors = ["lshoo <lshoo36@gmail.com>"]
 edition = "2021"
 
 exclude = [
   # Those files are rust-optimizer artifacts. You might want to commit them for convenience but they should not be part of the source code publication.
-  "ship.wasm",
+  "spaceship.wasm",
   "hash.txt",
 ]
 
@@ -36,7 +36,7 @@ cosmwasm-schema = { workspace = true }
 cosmwasm-std = { workspace = true }
 cosmwasm-storage = { workspace = true }
 cw-storage-plus = { workspace = true }
-cw-utils = "0.16"
+cw-utils = { workspace = true }
 cw2 = { workspace = true }
 cw721-base = { workspace = true }
 cw721 = { workspace = true }

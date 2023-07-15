@@ -24,7 +24,7 @@ pub fn instantiate(
 
     let sender = info.sender.to_string();
 
-    let cw721_contract = Cw721Contract::<Extension, Empty, Empty, Empty>::default();
+    let cw721_contract: Cw721Contract<Extension, Empty, Empty, Empty> = Cw721Contract::default();
     cw721_contract.instantiate(deps, env, info, msg)?;
 
     Ok(Response::new()
@@ -43,7 +43,7 @@ pub fn execute(
     let contract = Cw721Contract::default();
 
     match msg {
-        SetMinter { minter } => exec::set_minter(deps, info, minter),
+        // SetMinter { minter } => exec::set_minter(deps, info, minter),
         // msg to load  cw20-helper token data on nft
         LoadFreight {
             token_id,
@@ -67,7 +67,7 @@ pub fn execute(
     }
 }
 
-pub fn query(deps: Deps, env: Env, msg: QueryMsg<Extension>) -> StdResult<Binary> {
+pub fn query(deps: Deps, env: Env, msg: QueryMsg<Empty>) -> StdResult<Binary> {
     use QueryMsg::*;
 
     match msg {

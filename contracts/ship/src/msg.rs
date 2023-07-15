@@ -1,6 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Binary, Decimal, Empty, Uint128};
-use cw721_base::{ExecuteMsg as Cw721ExecuteMsg, MintMsg};
+use cw721_base::ExecuteMsg as Cw721ExecuteMsg;
 use cw_utils::Expiration;
 
 use crate::{
@@ -47,7 +47,12 @@ pub enum ExecuteMsg {
         operator: String,
     },
     // q3) message "Mint" which extends MintMsg of cw721_base with Extension type declared at state.rs
-    Mint(MintMsg<Extension>),
+    Mint {
+        token_id: String,
+        owner: String,
+        token_uri: Option<String>,
+        extension: Extension,
+    },
     Burn {
         token_id: String,
     },
@@ -94,7 +99,17 @@ impl TryFrom<ExecuteMsg> for Cw721ExecuteMsg<Metadata, Empty> {
                 recipient,
                 token_id,
             }),
-            Mint(mint_msg) => Ok(Cw721ExecuteMsg::Mint(mint_msg)),
+            Mint {
+                token_id,
+                owner,
+                token_uri,
+                extension,
+            } => Ok(Cw721ExecuteMsg::Mint {
+                token_id,
+                owner,
+                token_uri,
+                extension,
+            }),
             SendNft {
                 contract,
                 token_id,

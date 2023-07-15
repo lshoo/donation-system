@@ -41,7 +41,7 @@ impl TryFrom<Cw721ContractError> for ContractError {
         use Cw721ContractError::*;
 
         match err {
-            Unauthorized {} => Ok(ContractError::UnauthorizedErr {}),
+            // Unauthorized {} => Ok(ContractError::UnauthorizedErr {}),
             Claimed {} => Ok(ContractError::ClaimedErr {}),
             Expired {} => Ok(ContractError::ExpiredErr {}),
             ApprovalNotFound { spender } => Ok(ContractError::ApprovalNotFoundErr { spender }),

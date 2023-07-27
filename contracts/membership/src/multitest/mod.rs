@@ -6,7 +6,7 @@ use cosmwasm_std::{from_binary, to_binary, Addr, Decimal, WasmMsg};
 use cw_multi_test::{App, ContractWrapper, Executor};
 
 use anyhow::Result as AnyResult;
-use cw_utils::{parse_execute_response_data, parse_instantiate_response_data};
+use cw_utils::parse_instantiate_response_data;
 use std::convert::Into;
 
 use crate::{msg::*, *};
@@ -124,13 +124,15 @@ impl MembershipContract {
 
         let resp = app.execute_contract(sender, self.addr(), &msg, &[])?;
 
-        resp.data
-            .map(|data| parse_execute_response_data(&data))
-            .transpose()?
-            .and_then(|data| data.data)
-            .map(|data| from_binary(&data))
-            .transpose()
-            .map_err(Into::into)
+        from_binary(&resp.data.unwrap()).map_err(Into::into)
+
+        // resp.data
+        //     .map(|data| parse_execute_response_data(&data))
+        //     .transpose()?
+        //     .and_then(|data| data.data)
+        //     .map(|data| from_binary(&data))
+        //     .transpose()
+        //     .map_err(Into::into)
     }
 
     pub fn is_member(&self, app: &App, addr: &str) -> AnyResult<IsMemberResp> {
